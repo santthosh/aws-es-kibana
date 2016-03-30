@@ -1,21 +1,25 @@
 # aws-es-kibana
 
-AWS ElasticSearch/Kibana Proxy to access your [AWS ES](https://aws.amazon.com/elasticsearch-service/) cluster. This is the solution for accessing your cluster if you have (configured access policies)[http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-access-policies] for your ES domain
+AWS ElasticSearch/Kibana Proxy to access your [AWS ES](https://aws.amazon.com/elasticsearch-service/) cluster. 
+
+This is the solution for accessing your cluster if you have [configured access policies](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-access-policies) for your ES domain
 
 ## Usage
 
 Install the npm module 
 
-`npm install -g aws-es-kibana`
+    npm install -g aws-es-kibana
+    
+[![NPM Stats](https://nodei.co/npm/aws-es-kibana.png?downloads=true)](https://npmjs.org/package/aws-es-kibana)
 
 Set AWS credentials
                           
-`export AWS_ACCESS_KEY_ID=XXXXXXXXXXXXXXXXXXX`
-`export AWS_SECRET_ACCESS_KEY=XXXXXXXXXXXXXXXXXXX`
+    export AWS_ACCESS_KEY_ID=XXXXXXXXXXXXXXXXXXX
+    export AWS_SECRET_ACCESS_KEY=XXXXXXXXXXXXXXXXXXX
 
 Run the proxy
 
-`aws-es-kibana <cluster-endpoint>`
+    aws-es-kibana <cluster-endpoint>
 
 ## Credits
 

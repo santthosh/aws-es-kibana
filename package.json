@@ -1,6 +1,6 @@
 {
   "name": "aws-es-kibana",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "AWS ElasticSearch/Kibana Proxy",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,9 @@
     "AWS",
     "ES",
     "ElasticSearch",
-    "Kibana"
+    "Kibana",
+    "AWS ES Proxy",
+    "AWS ES Kibana"
   ],
   "author": "santthosh",
   "license": "Apache-2.0",
@@ -31,6 +33,7 @@
     "aws-sdk": "^2.2.48",
     "body-parser": "^1.15.0",
     "express": "^4.13.4",
+    "figlet": "^1.1.1",
     "http-proxy": "^1.13.2"
   }
 }
