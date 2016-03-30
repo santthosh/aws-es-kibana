@@ -20,6 +20,10 @@ Set AWS credentials
 Run the proxy
 
     aws-es-kibana <cluster-endpoint>
+    
+Example 
+
+![aws-es-kibana](https://raw.githubusercontent.com/santthosh/aws-es-kibana/master/aws-es-kibana.png)
 
 ## Credits
 
