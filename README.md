@@ -1,4 +1,4 @@
-# aws-es-kibana
+# AWS ES/Kibana Proxy
 
 AWS ElasticSearch/Kibana Proxy to access your [AWS ES](https://aws.amazon.com/elasticsearch-service/) cluster. 
 
