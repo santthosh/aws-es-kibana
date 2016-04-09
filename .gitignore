@@ -34,3 +34,5 @@ node_modules
 
 .aws_configure
 .idea
+*.swo
+*.swp
