@@ -20,6 +20,10 @@ Set AWS credentials
 Run the proxy
 
     aws-es-kibana <cluster-endpoint>
+
+Alternativly, you can set the _AWS_PROFILE_ environment variable
+
+    AWS_PROFILE=myprofile aws-es-kibana <cluster-endpoint>
     
 Example 
 
