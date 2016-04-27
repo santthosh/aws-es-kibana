@@ -8,20 +8,61 @@ var bodyParser = require('body-parser');
 var stream = require('stream');
 var figlet = require('figlet');
 
-if (process.argv.length != 3) {
-    console.error('usage: aws-es-proxy <aws-es-cluster-endpoint>');
+var yargs = require('yargs')
+    .usage('usage: $0 [options] <aws-es-cluster-endpoint>')
+    .option('b', {
+        alias: 'bind-address',
+        default: '127.0.0.1',
+        demand: false,
+        describe: 'the ip address to bind to',
+        type: 'string'
+    })
+    .option('p', {
+        alias: 'port',
+        default: 9200,
+        demand: false,
+        describe: 'the port to bind to',
+        type: 'number'
+    })
+    .option('r', {
+        alias: 'region',
+        demand: false,
+        describe: 'the region of the Elasticsearch cluster',
+        type: 'string'
+    })
+    .help()
+    .version()
+    .strict();
+var argv = yargs.argv;
+
+if (argv._.length !== 1) {
+    yargs.showHelp();
     process.exit(1);
 }
-var ENDPOINT = process.argv[2];
-var m = ENDPOINT.match(/\.([^.]+)\.es\.amazonaws\.com\.?$/);
-if (!m) {
-    console.error('region cannot be parsed from endpoint address, must end in .<region>.es.amazonaws.com');
-    process.exit(1);
+
+var ENDPOINT = argv._[0];
+
+// Try to infer the region if it is not provided as an argument.
+var REGION = argv.r;
+if (!REGION) {
+    var m = ENDPOINT.match(/\.([^.]+)\.es\.amazonaws\.com\.?$/);
+    if (m) {
+        REGION = m[1];
+    } else {
+        console.error('region cannot be parsed from endpoint address, etiher the endpoint must end ' +
+                      'in .<region>.es.amazonaws.com or --region should be provided as an argument');
+        yargs.showHelp();
+        process.exit(1);
+    }
 }
-var REGION = m[1];
-var TARGET = 'https://' + process.argv[2];
-var PORT = 9200;
-var BIND_ADDRESS = '127.0.0.1';
+
+var TARGET = argv._[0];
+if (!TARGET.match(/^https?:\/\//)) {
+    TARGET = 'https://' + TARGET;
+}
+
+var BIND_ADDRESS = argv.b;
+var PORT = argv.p;
 
 var creds;
 var chain = new AWS.CredentialProviderChain();
