@@ -6,7 +6,6 @@ var httpProxy = require('http-proxy');
 var express = require('express');
 var bodyParser = require('body-parser');
 var stream = require('stream');
-var figlet = require('figlet');
 
 var yargs = require('yargs')
     .usage('usage: $0 [options] <aws-es-cluster-endpoint>')
@@ -116,12 +115,6 @@ proxy.on('proxyReq', function (proxyReq, req, res, options) {
 });
 
 http.createServer(app).listen(PORT, BIND_ADDRESS);
-
-console.log(figlet.textSync('AWS ES Proxy!', {
-    font: 'Speed',
-    horizontalLayout: 'default',
-    verticalLayout: 'default'
-}));
 
 console.log('AWS ES cluster available at http://' + BIND_ADDRESS + ':' + PORT);
 console.log('Kibana available at http://' + BIND_ADDRESS + ':' + PORT + '/_plugin/kibana/');
