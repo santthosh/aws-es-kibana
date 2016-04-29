@@ -49,7 +49,7 @@ if (!REGION) {
     if (m) {
         REGION = m[1];
     } else {
-        console.error('region cannot be parsed from endpoint address, etiher the endpoint must end ' +
+        console.error('region cannot be parsed from endpoint address, either the endpoint must end ' +
                       'in .<region>.es.amazonaws.com or --region should be provided as an argument');
         yargs.showHelp();
         process.exit(1);
