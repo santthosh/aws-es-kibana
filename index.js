@@ -20,7 +20,7 @@ var yargs = require('yargs')
     })
     .option('p', {
         alias: 'port',
-        default: process.env.PORT || 9200,
+        default: process.env.PROXY_PORT || 9200,
         demand: false,
         describe: 'the port to bind to',
         type: 'number'
