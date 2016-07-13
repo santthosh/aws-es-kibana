@@ -13,7 +13,7 @@ var yargs = require('yargs')
     .usage('usage: $0 [options] <aws-es-cluster-endpoint>')
     .option('b', {
         alias: 'bind-address',
-        default: process.env.BIND_ADDRESS || '127.0.0.1',
+        default: process.env.BIND_ADDRESS || '0.0.0.0',
         demand: false,
         describe: 'the ip address to bind to',
         type: 'string'
