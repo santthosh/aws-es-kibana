@@ -4,7 +4,7 @@ AWS ElasticSearch/Kibana Proxy to access your [AWS ES](https://aws.amazon.com/el
 
 This is the solution for accessing your cluster if you have [configured access policies](http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-access-policies) for your ES domain
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Swingline0/aws-es-kibana/tree/stable)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/santthosh/aws-es-kibana)
 
 ## Usage
 
