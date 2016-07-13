@@ -101,7 +101,6 @@ var app = express();
 if (argv.u && argv.a) {
   app.use(basicAuth(argv.u, argv.a));
 }
-app.get('/', function(req, res) { res.redirect('/_plugin/kibana/'); }
 app.use(bodyParser.raw({type: '*/*'}));
 app.use(getcreds);
 app.use(function (req, res) {
