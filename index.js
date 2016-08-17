@@ -7,6 +7,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var stream = require('stream');
 var figlet = require('figlet');
+var compress = require('compression');
 
 var yargs = require('yargs')
     .usage('usage: $0 [options] <aws-es-cluster-endpoint>')
@@ -84,6 +85,7 @@ var proxy = httpProxy.createProxyServer({
 });
 
 var app = express();
+app.use(compress());
 app.use(bodyParser.raw({type: '*/*'}));
 app.use(getcreds);
 app.use(function (req, res) {

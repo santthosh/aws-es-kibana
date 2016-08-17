@@ -32,6 +32,7 @@
     "aws": "0.0.3-2",
     "aws-sdk": "^2.2.48",
     "body-parser": "^1.15.0",
+    "compression": "^1.6.2",
     "express": "^4.13.4",
     "figlet": "^1.1.1",
     "http-proxy": "^1.13.2",
