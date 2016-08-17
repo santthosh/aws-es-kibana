@@ -51,7 +51,7 @@ if (!REGION) {
         REGION = m[1];
     } else {
         console.error('region cannot be parsed from endpoint address, either the endpoint must end ' +
-                      'in .<region>.es.amazonaws.com or --region should be provided as an argument');
+            'in .<region>.es.amazonaws.com or --region should be provided as an argument');
         yargs.showHelp();
         process.exit(1);
     }
@@ -65,15 +65,15 @@ if (!TARGET.match(/^https?:\/\//)) {
 var BIND_ADDRESS = argv.b;
 var PORT = argv.p;
 
-var creds;
+var credentials;
 var chain = new AWS.CredentialProviderChain();
 chain.resolve(function (err, resolved) {
     if (err) throw err;
-    else creds = resolved;
+    else credentials = resolved;
 });
 
-function getcreds(req, res, next) {
-    return creds.get(function (err) {
+function getCredentials(req, res, next) {
+    return credentials.get(function (err) {
         if (err) return next(err);
         else return next();
     });
@@ -87,11 +87,11 @@ var proxy = httpProxy.createProxyServer({
 var app = express();
 app.use(compress());
 app.use(bodyParser.raw({type: '*/*'}));
-app.use(getcreds);
+app.use(getCredentials);
 app.use(function (req, res) {
     var bufferStream;
     if (Buffer.isBuffer(req.body)) {
-        var bufferStream = new stream.PassThrough();
+        bufferStream = new stream.PassThrough();
         bufferStream.end(req.body);
     }
     proxy.web(req, res, {buffer: bufferStream});
