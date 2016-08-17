@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.5.1",
-    "basic-auth": "^1.0.4",
+    "basic-auth-connect": "^1.0.0",
     "body-parser": "^1.15.2",
     "compression": "^1.6.2",
     "express": "^4.14.0",

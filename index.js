@@ -7,7 +7,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var stream = require('stream');
 var figlet = require('figlet');
-var basicAuth = require('basic-auth');
+var basicAuth = require('basic-auth-connect');
 var compress = require('compression');
 
 var yargs = require('yargs')
@@ -99,18 +99,13 @@ var proxy = httpProxy.createProxyServer({
 });
 
 var app = express();
+if (argv.u && argv.a) {
+    app.use(basicAuth(argv.u, argv.a));
+}
 app.use(compress());
 app.use(bodyParser.raw({type: '*/*'}));
 app.use(getCredentials);
 app.use(function (req, res) {
-    if (argv.u && argv.a) {
-        var credentials = basicAuth(req);
-
-        if (!credentials || credentials.name !== argv.u || credentials.pass !== argv.a) {
-            res.setHeader('WWW-Authenticate', 'Basic realm="' + credentials.name + '"');
-            return res.status(401).end('Access denied');
-        }
-    }
     var bufferStream;
     if (Buffer.isBuffer(req.body)) {
         bufferStream = new stream.PassThrough();
