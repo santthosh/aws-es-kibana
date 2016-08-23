@@ -14,7 +14,7 @@ var yargs = require('yargs')
     .usage('usage: $0 [options] <aws-es-cluster-endpoint>')
     .option('b', {
         alias: 'bind-address',
-        default: process.env.BIND_ADDRESS || '0.0.0.0',
+        default: process.env.BIND_ADDRESS || '127.0.0.1',
         demand: false,
         describe: 'the ip address to bind to',
         type: 'string'
@@ -148,6 +148,5 @@ console.log(figlet.textSync('AWS ES Proxy!', {
     verticalLayout: 'default'
 }));
 
-var address = BIND_ADDRESS === '0.0.0.0' ? '127.0.0.1' : BIND_ADDRESS;
-console.log('AWS ES cluster available at http://' + address + ':' + PORT);
-console.log('Kibana available at http://' + address + ':' + PORT + '/_plugin/kibana/');
+console.log('AWS ES cluster available at http://' + BIND_ADDRESS + ':' + PORT);
+console.log('Kibana available at http://' + BIND_ADDRESS + ':' + PORT + '/_plugin/kibana/');
