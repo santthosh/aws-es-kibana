@@ -109,7 +109,7 @@ app.use(compress());
 if (argv.u && argv.a) {
   app.use(basicAuth(argv.u, argv.a));
 }
-app.use(bodyParser.raw({type: '*/*'}));
+app.use(bodyParser.raw({type: function() { return true; }}));
 app.use(getCredentials);
 app.use(function (req, res) {
     var bufferStream;
