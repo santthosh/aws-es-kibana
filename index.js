@@ -7,40 +7,54 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var stream = require('stream');
 var figlet = require('figlet');
+var basicAuth = require('basic-auth-connect');
 
 var yargs = require('yargs')
     .usage('usage: $0 [options] <aws-es-cluster-endpoint>')
     .option('b', {
         alias: 'bind-address',
-        default: '127.0.0.1',
+        default: process.env.BIND_ADDRESS || '0.0.0.0',
         demand: false,
         describe: 'the ip address to bind to',
         type: 'string'
     })
     .option('p', {
         alias: 'port',
-        default: 9200,
+        default: process.env.PORT || 9200,
         demand: false,
         describe: 'the port to bind to',
         type: 'number'
     })
     .option('r', {
         alias: 'region',
+        default: process.env.REGION,
         demand: false,
         describe: 'the region of the Elasticsearch cluster',
         type: 'string'
+    })
+    .option('u', {
+      alias: 'user',
+      default: process.env.USER,
+      demand: false,
+      describe: 'the username to access the proxy'
+    })
+    .option('a', {
+      alias: 'password',
+      default: process.env.PASSWORD,
+      demand: false,
+      describe: 'the password to access the proxy'
     })
     .help()
     .version()
     .strict();
 var argv = yargs.argv;
 
-if (argv._.length !== 1) {
+var ENDPOINT = process.env.ENDPOINT || argv._[0];
+
+if (!ENDPOINT) {
     yargs.showHelp();
     process.exit(1);
 }
-
-var ENDPOINT = argv._[0];
 
 // Try to infer the region if it is not provided as an argument.
 var REGION = argv.r;
@@ -56,7 +70,7 @@ if (!REGION) {
     }
 }
 
-var TARGET = argv._[0];
+var TARGET = process.env.ENDPOINT || argv._[0];
 if (!TARGET.match(/^https?:\/\//)) {
     TARGET = 'https://' + TARGET;
 }
@@ -84,6 +98,9 @@ var proxy = httpProxy.createProxyServer({
 });
 
 var app = express();
+if (argv.u && argv.a) {
+  app.use(basicAuth(argv.u, argv.a));
+}
 app.use(bodyParser.raw({type: '*/*'}));
 app.use(getcreds);
 app.use(function (req, res) {

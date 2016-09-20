@@ -1,0 +1,21 @@
+{
+  "name": "aws-es-kibana",
+  "description": "A simple proxy to allow external access to your AWS Kibana instance",
+  "repository": "https://github.com/santthosh/aws-es-kibana",
+  "logo": "https://raw.githubusercontent.com/santthosh/aws-es-kibana/master/aws-es-kibana.png",
+  "keywords": [
+    "AWS",
+    "ES",
+    "ElasticSearch",
+    "Kibana",
+    "AWS ES Proxy",
+    "AWS ES Kibana"
+  ],
+  "env": {
+    "AWS_ACCESS_KEY_ID" : "Your AWS Access Key ID Here",
+    "AWS_SECRET_ACCESS_KEY" : "Your AWS Secret Key Here",
+    "ENDPOINT" : "ES Endpoint (ex: my-endpoint.region-1.es.amazonaws.com)",
+    "USER" : "HTTP Auth Username",
+    "PASSWORD" : "HTTP Auth Password"
+  }
+}
