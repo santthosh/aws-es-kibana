@@ -13,7 +13,7 @@ var yargs = require('yargs')
     .usage('usage: $0 [options] <aws-es-cluster-endpoint>')
     .option('b', {
         alias: 'bind-address',
-        default: process.env.BIND_ADDRESS || '0.0.0.0',
+        default: process.env.BIND_ADDRESS || '127.0.0.1',
         demand: false,
         describe: 'the ip address to bind to',
         type: 'string'
@@ -78,15 +78,15 @@ if (!TARGET.match(/^https?:\/\//)) {
 var BIND_ADDRESS = argv.b;
 var PORT = argv.p;
 
-var creds;
+var credentials;
 var chain = new AWS.CredentialProviderChain();
 chain.resolve(function (err, resolved) {
     if (err) throw err;
-    else creds = resolved;
+    else credentials = resolved;
 });
 
-function getcreds(req, res, next) {
-    return creds.get(function (err) {
+function getCredentials(req, res, next) {
+    return credentials.get(function (err) {
         if (err) return next(err);
         else return next();
     });
@@ -102,7 +102,7 @@ if (argv.u && argv.a) {
   app.use(basicAuth(argv.u, argv.a));
 }
 app.use(bodyParser.raw({type: '*/*'}));
-app.use(getcreds);
+app.use(getCredentials);
 app.use(function (req, res) {
     var bufferStream;
     if (Buffer.isBuffer(req.body)) {
@@ -112,7 +112,7 @@ app.use(function (req, res) {
     proxy.web(req, res, {buffer: bufferStream});
 });
 
-proxy.on('proxyReq', function (proxyReq, req, res, options) {
+proxy.on('proxyReq', function (proxyReq, req) {
     var endpoint = new AWS.Endpoint(ENDPOINT);
     var request = new AWS.HttpRequest(endpoint);
     request.method = proxyReq.method;
@@ -124,12 +124,18 @@ proxy.on('proxyReq', function (proxyReq, req, res, options) {
     request.headers['Host'] = ENDPOINT;
 
     var signer = new AWS.Signers.V4(request, 'es');
-    signer.addAuthorization(creds, new Date());
+    signer.addAuthorization(credentials, new Date());
 
     proxyReq.setHeader('Host', request.headers['Host']);
     proxyReq.setHeader('X-Amz-Date', request.headers['X-Amz-Date']);
     proxyReq.setHeader('Authorization', request.headers['Authorization']);
     if (request.headers['x-amz-security-token']) proxyReq.setHeader('x-amz-security-token', request.headers['x-amz-security-token']);
+});
+
+proxy.on('proxyRes', function (proxyReq, req, res) {
+    if (req.url.match(/\.(css|js|img|font)/)) {
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+    }
 });
 
 http.createServer(app).listen(PORT, BIND_ADDRESS);

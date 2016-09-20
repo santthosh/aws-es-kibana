@@ -32,13 +32,13 @@
     "aws-es-kibana": "index.js"
   },
   "dependencies": {
-    "aws": "0.0.3-2",
-    "aws-sdk": "^2.2.48",
+    "aws-sdk": "^2.5.1",
     "basic-auth-connect": "^1.0.0",
-    "body-parser": "^1.15.0",
-    "express": "^4.13.4",
-    "figlet": "^1.1.1",
-    "http-proxy": "^1.13.2",
-    "yargs": "^4.6.0"
+    "body-parser": "^1.15.2",
+    "compression": "^1.6.2",
+    "express": "^4.14.0",
+    "figlet": "^1.1.2",
+    "http-proxy": "^1.14.0",
+    "yargs": "^4.8.1"
   }
 }
