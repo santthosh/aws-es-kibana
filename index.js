@@ -45,6 +45,12 @@ var yargs = require('yargs')
       demand: false,
       describe: 'the password to access the proxy'
     })
+    .option('s', {
+      alias: 'silent',
+      default: false,
+      demand: false,
+      describe: 'remove figlet banner'
+    })
     .help()
     .version()
     .strict();
@@ -142,11 +148,13 @@ proxy.on('proxyRes', function (proxyReq, req, res) {
 
 http.createServer(app).listen(PORT, BIND_ADDRESS);
 
-console.log(figlet.textSync('AWS ES Proxy!', {
-    font: 'Speed',
-    horizontalLayout: 'default',
-    verticalLayout: 'default'
-}));
+if(!argv.s) {
+    console.log(figlet.textSync('AWS ES Proxy!', {
+        font: 'Speed',
+        horizontalLayout: 'default',
+        verticalLayout: 'default'
+    }));
+}
 
 console.log('AWS ES cluster available at http://' + BIND_ADDRESS + ':' + PORT);
 console.log('Kibana available at http://' + BIND_ADDRESS + ':' + PORT + '/_plugin/kibana/');
