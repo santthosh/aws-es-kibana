@@ -51,6 +51,13 @@ var yargs = require('yargs')
       demand: false,
       describe: 'remove figlet banner'
     })
+    .option('H', {
+        alias: 'health-path',
+        default: process.env.HEALTH_PATH,
+        demand: false,
+        describe: 'URI path for health check',
+        type: 'string'
+    })
     .help()
     .version()
     .strict();
@@ -111,6 +118,14 @@ if (argv.u && argv.a) {
 }
 app.use(bodyParser.raw({type: function() { return true; }}));
 app.use(getCredentials);
+
+if (argv.H) {
+    app.get(argv.H, function (req, res) {
+        res.setHeader('Content-Type', 'text/plain');
+        res.send('ok');
+    });
+}
+
 app.use(function (req, res) {
     var bufferStream;
     if (Buffer.isBuffer(req.body)) {
@@ -158,3 +173,6 @@ if(!argv.s) {
 
 console.log('AWS ES cluster available at http://' + BIND_ADDRESS + ':' + PORT);
 console.log('Kibana available at http://' + BIND_ADDRESS + ':' + PORT + '/_plugin/kibana/');
+if (argv.H) {
+    console.log('Health endpoint enabled at http://' + BIND_ADDRESS + ':' + PORT + argv.H);
+}
