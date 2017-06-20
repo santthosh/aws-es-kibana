@@ -51,6 +51,12 @@ var yargs = require('yargs')
       demand: false,
       describe: 'remove figlet banner'
     })
+    .option('l', {
+      alias: 'limit',
+      default: '100kb',
+      demand: false,
+      describe: 'controls the maximum request body size'
+    })
     .help()
     .version()
     .strict();
@@ -109,7 +115,7 @@ app.use(compress());
 if (argv.u && argv.a) {
   app.use(basicAuth(argv.u, argv.a));
 }
-app.use(bodyParser.raw({type: function() { return true; }}));
+app.use(bodyParser.raw({type: function() { return true; }, limit: argv.l}));
 app.use(getCredentials);
 app.use(function (req, res) {
     var bufferStream;
