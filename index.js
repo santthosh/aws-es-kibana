@@ -53,7 +53,7 @@ var yargs = require('yargs')
     })
     .option('l', {
       alias: 'limit',
-      default: process.env.LIMIT || '1kb',  
+      default: process.env.LIMIT || '10000kb',  
       demand: false,
       describe: 'request limit'
     })
