@@ -9,6 +9,7 @@ var stream = require('stream');
 var figlet = require('figlet');
 var basicAuth = require('basic-auth-connect');
 var compress = require('compression');
+var url = require('url')
 
 var yargs = require('yargs')
     .usage('usage: $0 [options] <aws-es-cluster-endpoint>')
@@ -88,6 +89,7 @@ if (!TARGET.match(/^https?:\/\//)) {
     TARGET = 'https://' + TARGET;
 }
 
+var TARGETHOST = url.parse(TARGET).hostname;
 var BIND_ADDRESS = argv.b;
 var PORT = argv.p;
 var REQ_LIMIT = argv.l;
@@ -136,7 +138,7 @@ proxy.on('proxyReq', function (proxyReq, req) {
     if (Buffer.isBuffer(req.body)) request.body = req.body;
     if (!request.headers) request.headers = {};
     request.headers['presigned-expires'] = false;
-    request.headers['Host'] = ENDPOINT;
+    request.headers['Host'] = TARGETHOST;
 
     var signer = new AWS.Signers.V4(request, 'es');
     signer.addAuthorization(credentials, new Date());
