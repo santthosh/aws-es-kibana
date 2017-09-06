@@ -58,6 +58,12 @@ var yargs = require('yargs')
         describe: 'URI path for health check',
         type: 'string'
     })
+    .option('l', {
+      alias: 'limit',
+      default: process.env.LIMIT || '1kb',  
+      demand: false,
+      describe: 'request limit'
+    })
     .help()
     .version()
     .strict();
@@ -91,6 +97,7 @@ if (!TARGET.match(/^https?:\/\//)) {
 
 var BIND_ADDRESS = argv.b;
 var PORT = argv.p;
+var REQ_LIMIT = argv.l;
 
 var credentials;
 var chain = new AWS.CredentialProviderChain();
@@ -116,7 +123,7 @@ app.use(compress());
 if (argv.u && argv.a) {
   app.use(basicAuth(argv.u, argv.a));
 }
-app.use(bodyParser.raw({type: function() { return true; }}));
+app.use(bodyParser.raw({limit: REQ_LIMIT, type: function() { return true; }}));
 app.use(getCredentials);
 
 if (argv.H) {

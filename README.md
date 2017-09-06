@@ -19,7 +19,7 @@ Set AWS credentials
     export AWS_ACCESS_KEY_ID=XXXXXXXXXXXXXXXXXXX
     export AWS_SECRET_ACCESS_KEY=XXXXXXXXXXXXXXXXXXX
 
-Run the proxy
+Run the proxy (do not include the `http` or `https` from your `cluster-endpoint` or the proxy won't function)
 
     aws-es-kibana <cluster-endpoint>
 
