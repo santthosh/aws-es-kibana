@@ -35,13 +35,13 @@ var yargs = require('yargs')
     })
     .option('u', {
       alias: 'user',
-      default: process.env.USER,
+      default: process.env.AUTH_USER ||process.env.USER,
       demand: false,
       describe: 'the username to access the proxy'
     })
     .option('a', {
       alias: 'password',
-      default: process.env.PASSWORD,
+      default: process.env.AUTH_PASSWORD || process.env.PASSWORD,
       demand: false,
       describe: 'the password to access the proxy'
     })
