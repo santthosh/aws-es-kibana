@@ -136,7 +136,7 @@ proxy.on('proxyReq', function (proxyReq, req) {
     if (Buffer.isBuffer(req.body)) request.body = req.body;
     if (!request.headers) request.headers = {};
     request.headers['presigned-expires'] = false;
-    request.headers['Host'] = ENDPOINT;
+    request.headers['Host'] = ENDPOINT.split("://")[0];
 
     var signer = new AWS.Signers.V4(request, 'es');
     signer.addAuthorization(credentials, new Date());
