@@ -17,6 +17,7 @@
     "ENDPOINT" : "ES Endpoint (ex: my-endpoint.region-1.es.amazonaws.com)",
     "USER" : "HTTP Auth Username",
     "PASSWORD" : "HTTP Auth Password",
-    "BIND_ADDRESS" : "0.0.0.0"
+    "BIND_ADDRESS" : "0.0.0.0",
+    "HEALTH_PATH" : "Optional HTTP Path for health check (ex: '/health')"
   }
 }
