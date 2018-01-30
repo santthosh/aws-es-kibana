@@ -1,6 +1,6 @@
 [![npm version](https://badge.fury.io/js/aws-es-kibana.svg)](https://badge.fury.io/js/aws-es-kibana) ![dependencies](https://david-dm.org/santthosh/aws-es-kibana.svg)
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/santthosh/aws-es-kibana)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/seoker/aws-es-kibana)
 
 # AWS ES/Kibana Proxy
 
@@ -23,14 +23,14 @@ Run the proxy (do not include the `http` or `https` from your `cluster-endpoint`
 
     aws-es-kibana <cluster-endpoint>
 
-Where cluster-endpoint can be either a URL (i.e. https://search-xxxxx.us-west2.es.amazonaws.com) or a hostname (i.e. search-xxxxx.us-west2.es.amazonaws.com). 
+Where cluster-endpoint can be either a URL (i.e. https://search-xxxxx.us-west-2.es.amazonaws.com) or a hostname (i.e. search-xxxxx.us-west-2.es.amazonaws.com). 
 Alternatively, you can set the _AWS_PROFILE_ environment variable
 
     AWS_PROFILE=myprofile aws-es-kibana <cluster-endpoint>
     
 Example with hostname as cluster-endpoint:
 
-![aws-es-kibana](https://raw.githubusercontent.com/santthosh/aws-es-kibana/master/aws-es-kibana.png)
+![aws-es-kibana](https://raw.githubusercontent.com/seoker/aws-es-kibana/master/aws-es-kibana.png)
 
 ### Run within docker container
 
