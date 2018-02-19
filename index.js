@@ -7,8 +7,9 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var stream = require('stream');
 var figlet = require('figlet');
-var basicAuth = require('basic-auth-connect');
 var compress = require('compression');
+
+const authS3O = require('@financial-times/s3o-middleware');
 
 var yargs = require('yargs')
     .usage('usage: $0 [options] <aws-es-cluster-endpoint>')
@@ -32,18 +33,6 @@ var yargs = require('yargs')
         demand: false,
         describe: 'the region of the Elasticsearch cluster',
         type: 'string'
-    })
-    .option('u', {
-      alias: 'user',
-      default: process.env.USER,
-      demand: false,
-      describe: 'the username to access the proxy'
-    })
-    .option('a', {
-      alias: 'password',
-      default: process.env.PASSWORD,
-      demand: false,
-      describe: 'the password to access the proxy'
     })
     .option('s', {
       alias: 'silent',
@@ -112,10 +101,13 @@ var proxy = httpProxy.createProxyServer({
 });
 
 var app = express();
+
+
 app.use(compress());
-if (argv.u && argv.a) {
-  app.use(basicAuth(argv.u, argv.a));
-}
+app.use((req, res, next) => {
+    authS3O(req, res, next)
+});
+
 app.use(bodyParser.raw({limit: REQ_LIMIT, type: function() { return true; }}));
 app.use(getCredentials);
 app.use(function (req, res) {
@@ -153,7 +145,7 @@ proxy.on('proxyRes', function (proxyReq, req, res) {
     }
 });
 
-http.createServer(app).listen(PORT, BIND_ADDRESS);
+http.createServer(app).listen(PORT);
 
 if(!argv.s) {
     console.log(figlet.textSync('AWS ES Proxy!', {

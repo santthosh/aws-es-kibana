@@ -14,8 +14,6 @@
   "env": {
     "AWS_ACCESS_KEY_ID" : "Your AWS Access Key ID Here",
     "AWS_SECRET_ACCESS_KEY" : "Your AWS Secret Key Here",
-    "ENDPOINT" : "ES Endpoint (ex: my-endpoint.region-1.es.amazonaws.com)",
-    "USER" : "HTTP Auth Username",
-    "PASSWORD" : "HTTP Auth Password"
+    "ENDPOINT" : "ES Endpoint (ex: my-endpoint.region-1.es.amazonaws.com)"
   }
 }
