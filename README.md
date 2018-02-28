@@ -23,11 +23,12 @@ Run the proxy (do not include the `http` or `https` from your `cluster-endpoint`
 
     aws-es-kibana <cluster-endpoint>
 
+Where cluster-endpoint can be either a URL (i.e. https://search-xxxxx.us-west2.es.amazonaws.com) or a hostname (i.e. search-xxxxx.us-west2.es.amazonaws.com). 
 Alternatively, you can set the _AWS_PROFILE_ environment variable
 
     AWS_PROFILE=myprofile aws-es-kibana <cluster-endpoint>
     
-Example 
+Example with hostname as cluster-endpoint:
 
 ![aws-es-kibana](https://raw.githubusercontent.com/santthosh/aws-es-kibana/master/aws-es-kibana.png)
 
