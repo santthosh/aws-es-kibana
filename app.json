@@ -1,8 +1,8 @@
 {
   "name": "aws-es-kibana",
   "description": "A simple proxy to allow external access to your AWS Kibana instance",
-  "repository": "https://github.com/seoker/aws-es-kibana",
-  "logo": "https://raw.githubusercontent.com/seoker/aws-es-kibana/master/aws-es-kibana.png",
+  "repository": "https://github.com/santthosh/aws-es-kibana",
+  "logo": "https://raw.githubusercontent.com/santthosh/aws-es-kibana/master/aws-es-kibana.png",
   "keywords": [
     "AWS",
     "ES",
