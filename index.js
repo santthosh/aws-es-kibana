@@ -100,11 +100,19 @@ var PORT = argv.p;
 var REQ_LIMIT = argv.l;
 
 var credentials;
-var chain = new AWS.CredentialProviderChain();
-chain.resolve(function (err, resolved) {
-    if (err) throw err;
-    else credentials = resolved;
-});
+
+var PROFILE = process.env.AWS_PROFILE;
+
+if (!PROFILE) {
+    var chain = new AWS.CredentialProviderChain();
+    chain.resolve(function (err, resolved) {
+        if (err) throw err;
+        else credentials = resolved;
+    });
+} else {
+    credentials = new AWS.SharedIniFileCredentials({profile: PROFILE});
+    AWS.config.credentials = credentials;
+}
 
 function getCredentials(req, res, next) {
     return credentials.get(function (err) {
