@@ -60,7 +60,7 @@ var yargs = require('yargs')
     })
     .option('l', {
       alias: 'limit',
-      default: process.env.LIMIT || '10000kb',  
+      default: process.env.LIMIT || '10000kb',
       demand: false,
       describe: 'request limit'
     })
@@ -120,17 +120,21 @@ function getCredentials(req, res, next) {
         else return next();
     });
 }
-var proxy = httpProxy.createProxyServer({
+
+var options = {
     target: TARGET,
     changeOrigin: true,
     secure: true
-});
+};
+
+if (argv.u && argv.a) {
+  options['auth'] = argv.u + ':' + argv.a;
+}
+
+var proxy = httpProxy.createProxyServer(options);
 
 var app = express();
 app.use(compress());
-if (argv.u && argv.a) {
-  app.use(basicAuth(argv.u, argv.a));
-}
 app.use(bodyParser.raw({limit: REQ_LIMIT, type: function() { return true; }}));
 app.use(getCredentials);
 
