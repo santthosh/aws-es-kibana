@@ -1,4 +1,5 @@
 [![npm version](https://badge.fury.io/js/aws-es-kibana.svg)](https://badge.fury.io/js/aws-es-kibana) ![dependencies](https://david-dm.org/santthosh/aws-es-kibana.svg)
+[![Docker Stars](https://img.shields.io/docker/stars/santthosh/aws-es-kibana.svg)](https://registry.hub.docker.com/v2/repositories/santthosh/aws-es-kibana/stars/count/)
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/santthosh/aws-es-kibana)
 
@@ -36,13 +37,18 @@ Example with hostname as cluster-endpoint:
 
 If you are familiar with Docker, you can run `aws-es-kibana` within a Docker container
 
-Build the image
+You can pull the official container for use
+
+    docker pull santthosh/aws-es-kibana
+
+(or) Build the image
 
 	docker build -t aws-es-kibana .
 
 Run the container (do not forget to pass the required environment variables)
 
 	docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -p 127.0.0.1:9200:9200 aws-es-kibana -b 0.0.0.0 <cluster-endpoint>
+
 
 ## Credits
 
