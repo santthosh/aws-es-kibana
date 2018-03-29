@@ -39,7 +39,7 @@ If you are familiar with Docker, you can run `aws-es-kibana` within a Docker con
 
 You can pull the official container for use
 
-    docker pull santthosh/aws-es-kibana
+    docker pull santthosh/aws-es-kibana:latest
 
 (or) Build the image
 
