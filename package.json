@@ -1,6 +1,6 @@
 {
   "name": "aws-es-kibana",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "AWS ElasticSearch/Kibana Proxy",
   "main": "index.js",
   "scripts": {
