@@ -145,6 +145,10 @@ if (argv.H) {
     });
 }
 
+if (argv.u && argv.a) {
+  app.use(basicAuth(argv.u, argv.a));
+}
+
 app.use(function (req, res) {
     var bufferStream;
     if (Buffer.isBuffer(req.body)) {
