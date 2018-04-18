@@ -79,7 +79,7 @@ if (!ENDPOINT) {
 // Try to infer the region if it is not provided as an argument.
 var REGION = argv.r;
 if (!REGION) {
-    var m = ENDPOINT.match(/\.([^.]+)\.es\.amazonaws\.com\.?$/);
+    var m = ENDPOINT.match(/\.([^.]+)\.es\.amazonaws\.com\.?(?=.*$)/);
     if (m) {
         REGION = m[1];
     } else {
