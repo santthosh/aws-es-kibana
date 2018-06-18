@@ -149,11 +149,11 @@ if (argv.u && argv.a) {
   app.use(basicAuth(argv.u, argv.a));
 }
 
-app.use(function (req, res) {
+app.use(async function (req, res) {
     var bufferStream;
     if (Buffer.isBuffer(req.body)) {
         var bufferStream = new stream.PassThrough();
-        bufferStream.end(req.body);
+        await bufferStream.end(req.body);
     }
     proxy.web(req, res, {buffer: bufferStream});
 });
