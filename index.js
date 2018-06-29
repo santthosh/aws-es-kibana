@@ -7,7 +7,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var stream = require('stream');
 var figlet = require('figlet');
-var basicAuth = require('basic-auth-connect');
+var basicAuth = require('express-basic-auth');
 var compress = require('compression');
 
 var yargs = require('yargs')
@@ -127,10 +127,6 @@ var options = {
     secure: true
 };
 
-if (argv.u && argv.a) {
-  options['auth'] = argv.u + ':' + argv.a;
-}
-
 var proxy = httpProxy.createProxyServer(options);
 
 var app = express();
@@ -146,7 +142,17 @@ if (argv.H) {
 }
 
 if (argv.u && argv.a) {
-  app.use(basicAuth(argv.u, argv.a));
+
+  var users = {};
+  var user = process.env.USER || process.env.AUTH_USER;
+  var pass = process.env.PASSWORD || process.env.AUTH_PASSWORD;
+
+  users[user] = pass;
+
+  app.use(basicAuth({
+    users: users,
+    challenge: true
+  }));
 }
 
 app.use(function (req, res) {
