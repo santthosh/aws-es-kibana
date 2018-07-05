@@ -9,6 +9,8 @@ var stream = require('stream');
 var figlet = require('figlet');
 var basicAuth = require('basic-auth-connect');
 var compress = require('compression');
+const fs = require('fs');
+const homedir = require('os').homedir();
 
 var yargs = require('yargs')
     .usage('usage: $0 [options] <aws-es-cluster-endpoint>')
@@ -149,11 +151,11 @@ if (argv.u && argv.a) {
   app.use(basicAuth(argv.u, argv.a));
 }
 
-app.use(function (req, res) {
+app.use(async function (req, res) {
     var bufferStream;
     if (Buffer.isBuffer(req.body)) {
         var bufferStream = new stream.PassThrough();
-        bufferStream.end(req.body);
+        await bufferStream.end(req.body);
     }
     proxy.web(req, res, {buffer: bufferStream});
 });
@@ -199,3 +201,8 @@ console.log('Kibana available at http://' + BIND_ADDRESS + ':' + PORT + '/_plugi
 if (argv.H) {
     console.log('Health endpoint enabled at http://' + BIND_ADDRESS + ':' + PORT + argv.H);
 }
+
+fs.watch(`${homedir}/.aws/credentials`, (eventType, filename) => {
+    credentials = new AWS.SharedIniFileCredentials({profile: PROFILE});
+    AWS.config.credentials = credentials;
+});
