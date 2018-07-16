@@ -112,8 +112,13 @@ if (!PROFILE) {
         else credentials = resolved;
     });
 } else {
-    credentials = new AWS.SharedIniFileCredentials({profile: PROFILE});
-    AWS.config.credentials = credentials;
+    var loadAwsCredentialsFile = function() {
+        credentials = new AWS.SharedIniFileCredentials({profile: PROFILE});
+        AWS.config.credentials = credentials;
+    };
+
+    loadAwsCredentialsFile();
+    fs.watch(`${homedir}/.aws/credentials`, loadAwsCredentialsFile);
 }
 
 function getCredentials(req, res, next) {
@@ -207,8 +212,3 @@ console.log('Kibana available at http://' + BIND_ADDRESS + ':' + PORT + '/_plugi
 if (argv.H) {
     console.log('Health endpoint enabled at http://' + BIND_ADDRESS + ':' + PORT + argv.H);
 }
-
-fs.watch(`${homedir}/.aws/credentials`, (eventType, filename) => {
-    credentials = new AWS.SharedIniFileCredentials({profile: PROFILE});
-    AWS.config.credentials = credentials;
-});
