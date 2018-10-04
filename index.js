@@ -208,7 +208,9 @@ if (argv.H) {
     console.log('Health endpoint enabled at http://' + BIND_ADDRESS + ':' + PORT + argv.H);
 }
 
-fs.watch(`${homedir}/.aws/credentials`, (eventType, filename) => {
-    credentials = new AWS.SharedIniFileCredentials({profile: PROFILE});
-    AWS.config.credentials = credentials;
-});
+if (PROFILE) {
+    fs.watch(`${homedir}/.aws/credentials`, (eventType, filename) => {
+        credentials = new AWS.SharedIniFileCredentials({profile: PROFILE});
+        AWS.config.credentials = credentials;
+    });
+}
