@@ -8,6 +8,7 @@ RUN chown aws-es-kibana:aws-es-kibana /app
 COPY package.json /app
 RUN npm install
 COPY index.js /app
+RUN mkdir /root/.aws && cd /root/.aws && touch credentials
 
 EXPOSE 9200
 
