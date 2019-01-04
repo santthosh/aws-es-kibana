@@ -192,6 +192,15 @@ proxy.on('proxyRes', function (proxyReq, req, res) {
     }
 });
 
+proxy.on('error', function (err, req, res) {
+    res.writeHead(502, {
+        'Content-Type': 'text/plain'
+    });
+
+    console.log('Got an error from Elasticsearch: ' + err);
+    res.end('Got an error from Elasticsearch.' );
+});
+
 http.createServer(app).listen(PORT, BIND_ADDRESS);
 
 if(!argv.s) {
