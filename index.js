@@ -36,22 +36,22 @@ var yargs = require('yargs')
         type: 'string'
     })
     .option('u', {
-      alias: 'user',
-      default: process.env.AUTH_USER ||process.env.USER,
-      demand: false,
-      describe: 'the username to access the proxy'
+        alias: 'user',
+        default: process.env.AUTH_USER || process.env.USER,
+        demand: false,
+        describe: 'the username to access the proxy'
     })
     .option('a', {
-      alias: 'password',
-      default: process.env.AUTH_PASSWORD || process.env.PASSWORD,
-      demand: false,
-      describe: 'the password to access the proxy'
+        alias: 'password',
+        default: process.env.AUTH_PASSWORD || process.env.PASSWORD,
+        demand: false,
+        describe: 'the password to access the proxy'
     })
     .option('s', {
-      alias: 'silent',
-      default: false,
-      demand: false,
-      describe: 'remove figlet banner'
+        alias: 'silent',
+        default: false,
+        demand: false,
+        describe: 'remove figlet banner'
     })
     .option('H', {
         alias: 'health-path',
@@ -61,10 +61,24 @@ var yargs = require('yargs')
         type: 'string'
     })
     .option('l', {
-      alias: 'limit',
-      default: process.env.LIMIT || '10000kb',
-      demand: false,
-      describe: 'request limit'
+        alias: 'limit',
+        default: process.env.LIMIT || '10000kb',
+        demand: false,
+        describe: 'request limit'
+    })
+    .option('t', {
+        alias: 'mfa-token',
+        default: process.env.MFA_TOKEN,
+        demand: false,
+        describe: 'mfa token',
+        type: 'string'
+    })
+    .option('sr', {
+        alias: 'mfa-serial',
+        default: process.env.MFA_SERIAL,
+        demand: false,
+        describe: 'mfa serial (hardware device serial or virtual device arn)',
+        type: 'string'
     })
     .help()
     .version()
@@ -86,7 +100,7 @@ if (!REGION) {
         REGION = m[1];
     } else {
         console.error('region cannot be parsed from endpoint address, either the endpoint must end ' +
-                      'in .<region>.es.amazonaws.com or --region should be provided as an argument');
+            'in .<region>.es.amazonaws.com or --region should be provided as an argument');
         yargs.showHelp();
         process.exit(1);
     }
@@ -104,15 +118,28 @@ var REQ_LIMIT = argv.l;
 var credentials;
 
 var PROFILE = process.env.AWS_PROFILE;
+var SERIAL = argv.sr;
+var TOKEN = argv.t;
 
-if (!PROFILE) {
+if (!PROFILE && (!TOKEN || !SERIAL)) {
     var chain = new AWS.CredentialProviderChain();
     chain.resolve(function (err, resolved) {
         if (err) throw err;
         else credentials = resolved;
     });
 } else {
-    credentials = new AWS.SharedIniFileCredentials({profile: PROFILE});
+    var credentialOptions = {};
+    if (PROFILE) credentialOptions.profile = PROFILE;
+    credentials = new AWS.SharedIniFileCredentials(credentialOptions);
+
+    if (TOKEN && SERIAL) {
+        var params = {
+            SerialNumber: SERIAL,
+            TokenCode: TOKEN,
+        };
+        credentials = new AWS.TemporaryCredentials(params, credentials);
+    }
+
     AWS.config.credentials = credentials;
 }
 
@@ -145,16 +172,16 @@ if (argv.H) {
 
 if (argv.u && argv.a) {
 
-  var users = {};
-  var user = process.env.USER || process.env.AUTH_USER;
-  var pass = process.env.PASSWORD || process.env.AUTH_PASSWORD;
+    var users = {};
+    var user = process.env.USER || process.env.AUTH_USER;
+    var pass = process.env.PASSWORD || process.env.AUTH_PASSWORD;
 
-  users[user] = pass;
+    users[user] = pass;
 
-  app.use(basicAuth({
-    users: users,
-    challenge: true
-  }));
+    app.use(basicAuth({
+        users: users,
+        challenge: true
+    }));
 }
 
 app.use(async function (req, res) {

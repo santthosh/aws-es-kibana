@@ -28,7 +28,11 @@ Where cluster-endpoint can be either a URL (i.e. https://search-xxxxx.us-west-2.
 Alternatively, you can set the _AWS_PROFILE_ environment variable
 
     AWS_PROFILE=myprofile aws-es-kibana <cluster-endpoint>
-    
+
+With MFA Enabled on your IAM Account (can be a hardware device serial number, or virtual device such as Google Authenticator, like example below)
+
+    aws-es-kibana <cluster-endpoint> --mfa-serial arn:aws:iam::<AWS Account Number>:mfa/<username>  --mfa-token <current token value>
+
 Example with hostname as cluster-endpoint:
 
 ![aws-es-kibana](https://raw.githubusercontent.com/santthosh/aws-es-kibana/master/aws-es-kibana.png)
