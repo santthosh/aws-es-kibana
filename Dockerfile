@@ -9,6 +9,9 @@ COPY package.json /app
 RUN npm install
 COPY index.js /app
 
+# fix the annoying /root/.aws/credentials ENOENT error
+RUN mkdir /root/.aws && touch /root/.aws/credentials
+
 EXPOSE 9200
 
 ENTRYPOINT ["node", "index.js"]
