@@ -146,8 +146,8 @@ if (argv.H) {
 if (argv.u && argv.a) {
 
   var users = {};
-  var user = process.env.USER || process.env.AUTH_USER;
-  var pass = process.env.PASSWORD || process.env.AUTH_PASSWORD;
+  var user = argv.u || process.env.USER || process.env.AUTH_USER;
+  var pass = argv.a || process.env.PASSWORD || process.env.AUTH_PASSWORD;
 
   users[user] = pass;
 
