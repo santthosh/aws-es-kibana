@@ -53,6 +53,12 @@ var yargs = require('yargs')
       demand: false,
       describe: 'remove figlet banner'
     })
+    .option('U', {
+      alias: 'unsecure',
+      default: false,
+      demand: false,
+      describe: 'disable SSL certificate validation (e.g. for SSH tunnels)'
+    })
     .option('H', {
         alias: 'health-path',
         default: process.env.HEALTH_PATH,
@@ -126,7 +132,7 @@ function getCredentials(req, res, next) {
 var options = {
     target: TARGET,
     changeOrigin: true,
-    secure: true
+    secure: (!argv.U)
 };
 
 var proxy = httpProxy.createProxyServer(options);
