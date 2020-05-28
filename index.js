@@ -102,6 +102,7 @@ var proxy = httpProxy.createProxyServer({
 
 var app = express();
 
+app.enable('trust proxy');
 app.set('s3o-cookie-ttl', 86400000);
 
 app.use(compress());
