@@ -32,7 +32,7 @@
     "aws-es-kibana": "index.js"
   },
   "dependencies": {
-    "@financial-times/s3o-middleware": "^2.0.6",
+    "@financial-times/ed-tech-auth": "^1.4.1",
     "aws-sdk": "^2.5.1",
     "basic-auth-connect": "^1.0.0",
     "body-parser": "^1.15.2",

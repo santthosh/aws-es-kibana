@@ -9,7 +9,7 @@ var stream = require('stream');
 var figlet = require('figlet');
 var compress = require('compression');
 
-const authS3O = require('@financial-times/s3o-middleware');
+const EdTechAuth = require('@financial-times/ed-tech-auth');
 
 var yargs = require('yargs')
     .usage('usage: $0 [options] <aws-es-cluster-endpoint>')
@@ -103,12 +103,10 @@ var proxy = httpProxy.createProxyServer({
 var app = express();
 
 app.enable('trust proxy');
-app.set('s3o-cookie-ttl', 86400000);
 
 app.use(compress());
-app.use((req, res, next) => {
-    authS3O(req, res, next)
-});
+const auth = new EdTechAuth(app);
+app.use(auth.middleware);
 
 app.use(bodyParser.raw({limit: REQ_LIMIT, type: function() { return true; }}));
 app.use(getCredentials);
