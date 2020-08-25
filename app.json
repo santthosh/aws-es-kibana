@@ -15,5 +15,12 @@
     "AWS_ACCESS_KEY_ID" : "Your AWS Access Key ID Here",
     "AWS_SECRET_ACCESS_KEY" : "Your AWS Secret Key Here",
     "ENDPOINT" : "ES Endpoint (ex: my-endpoint.region-1.es.amazonaws.com)"
+  },
+  "HEROKU_APP_NAME": {
+    "required": true
+  },
+  "scripts": {
+    "postdeploy": "node ./scripts/post-deploy.js",
+    "pr-predestroy": "node ./scripts/pre-destroy.js"
   }
 }
