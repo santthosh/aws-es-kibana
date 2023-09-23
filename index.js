@@ -8,12 +8,11 @@ const bodyParser = require('body-parser');
 const stream = require('stream');
 const basicAuth = require('express-basic-auth');
 const compress = require('compression');
-const fs = require('fs');
 const os = require('os');
 const figlet = require('figlet');
 
 const yargs = require('yargs')
-    .usage('usage: $0 [options] <aws-es-cluster-endpoint>')
+    .usage('usage: $0 [options] <aws-es-cluster-endpoint> or set ES_ENDPOINT environment variable ')
     .option('b', {
         alias: 'bind-address',
         default: process.env.BIND_ADDRESS || '127.0.0.1',
@@ -30,7 +29,7 @@ const yargs = require('yargs')
     })
     .option('r', {
         alias: 'region',
-        default: process.env.REGION,
+        default: process.env.AWS_REGION,
         demand: false,
         describe: 'the region of the Elasticsearch cluster',
         type: 'string',
@@ -72,15 +71,17 @@ const yargs = require('yargs')
 
 const argv = yargs.argv;
 
-const ENDPOINT = process.env.ENDPOINT || argv._[0];
+const ES_ENDPOINT = process.env.ES_ENDPOINT || argv._[0];
+const REGION = argv.r || process.env.AWS_REGION;
 
-if (!ENDPOINT) {
+// Check if ES_ENDPOINT is provided
+if (!ES_ENDPOINT) {
+    console.error('Elasticsearch endpoint is required. Set ES_ENDPOINT or provide it as an argument.');
     yargs.showHelp();
     process.exit(1);
 }
 
-const REGION = argv.r || process.env.AWS_REGION
-
+// Check if REGION is provided
 if (!REGION) {
     console.error(
         'Region must be provided either through --region argument or AWS_REGION environment variable.'
@@ -89,11 +90,38 @@ if (!REGION) {
     process.exit(1);
 }
 
-const TARGET = process.env.ENDPOINT || argv._[0];
-if (!TARGET.match(/^https?:\/\//)) {
-    console.error('Elasticsearch endpoint must start with http:// or https://');
+// Check if AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are provided
+if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
+    console.error('AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY must be provided as environment variables.');
+    yargs.showHelp();
     process.exit(1);
 }
+
+// Check if AUTH_USER and AUTH_PASSWORD are provided together
+if ((process.env.AUTH_USER && !process.env.AUTH_PASSWORD) || (!process.env.AUTH_USER && process.env.AUTH_PASSWORD)) {
+    console.error('Both AUTH_USER and AUTH_PASSWORD must be provided or omitted together.');
+    yargs.showHelp();
+    process.exit(1);
+}
+
+// Check if PORT is a valid number
+if (isNaN(PORT) || PORT < 1 || PORT > 65535) {
+    console.error('Invalid PORT number. Please provide a valid port number between 1 and 65535.');
+    yargs.showHelp();
+    process.exit(1);
+}
+
+// Check if LIMIT is a valid limit format
+if (!/^\d+(\.\d+)?[kKmMgG]?[bB]?$/.test(REQ_LIMIT)) {
+    console.error('Invalid request limit format. Please provide a valid limit (e.g., 10000kb).');
+    yargs.showHelp();
+    process.exit(1);
+}
+
+// Check if ENDPOINT starts with 'http://' or 'https://'
+const TARGET = (ES_ENDPOINT.startsWith('http://') || ES_ENDPOINT.startsWith('https://'))
+    ? ES_ENDPOINT
+    : `https://${ES_ENDPOINT}`; // Assuming https by default if missing
 
 const BIND_ADDRESS = argv.b;
 const PORT = argv.p;
@@ -148,7 +176,7 @@ app.use(async (req, res) => {
 });
 
 proxy.on('proxyReq', (proxyReq, req) => {
-    const endpoint = new AWS.Endpoint(ENDPOINT);
+    const endpoint = new AWS.Endpoint(ES_ENDPOINT);
     const request = new AWS.HttpRequest(endpoint);
     request.method = proxyReq.method;
     request.path = proxyReq.path;
@@ -181,7 +209,7 @@ server.on('error', (error) => {
     process.exit(1);
 });
 
-server.listen(PORT, BIND_ADDRESS, () => {
+const listener = server.listen(PORT, BIND_ADDRESS, () => {
     if (!argv.s) {
         console.log(
             figlet.textSync('AWS ES Proxy!', {
@@ -199,14 +227,9 @@ server.listen(PORT, BIND_ADDRESS, () => {
     }
 });
 
-fs.watch(`${os.homedir()}/.aws/credentials`, (eventType, filename) => {
-    console.log('AWS credentials file changed. Reloading credentials.');
-    AWS.config.credentials = new AWS.SharedIniFileCredentials({ profile: PROFILE });
-});
-
 process.on('SIGINT', () => {
     console.log('Received SIGINT. Exiting...');
-    server.close(() => {
+    listener.close(() => {
         console.log('Server has closed. Exiting gracefully.');
         process.exit(0);
     });

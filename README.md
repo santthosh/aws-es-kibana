@@ -13,16 +13,17 @@ This is the solution for accessing your cluster if you have [configured access p
 
 Install the npm module
 
-    npm install -g aws-es-kibana
-    s
-Set AWS credentials
+    npm install -g aws-es-kibana-xt
+Set AWS credentials example below
 
-    export AWS_ACCESS_KEY_ID=XXXXXXXXXXXXXXXXXXX
-    export AWS_SECRET_ACCESS_KEY=XXXXXXXXXXXXXXXXXXX
-    export AWS_REGION=xxxxxxxxxxxxxx
+
+     export AWS_ACCESS_KEY_ID="AIUDUBSUNSKDKSMKMKSNDKSDNSJ"
+     export AWS_SECRET_ACCESS_KEY="sdefescvrefdc/casedfwedfwa"
+     export AWS_REGION="eu-west-1"
+     export ENDPOINT="search-xxxxx.us-west-2.es.amazonaws.com"
+
 
 Run the proxy (do not include the `http` or `https` from your `cluster-endpoint` or the proxy won't function)
-zz
 aws-es-kibana <cluster-endpoint>
 
 Where cluster-endpoint can be either a URL (i.e. https://search-xxxxx.us-west-2.es.amazonaws.com) or a hostname (i.e. search-xxxxx.us-west-2.es.amazonaws.com).
